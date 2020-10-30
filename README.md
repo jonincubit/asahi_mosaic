@@ -24,6 +24,14 @@ scipy==1.5.1
 tensorflow-gpu==1.14.0
 utm==0.6.0
 
+### Dataset
+
+1_単写真オルソデータ dataset1
+H29_Fujisawa        dataset2
+H29_HigashiKurume   dataset3
+
+https://s3.console.aws.amazon.com/s3/upload/results-jon/houses_roads.tar.xz?region=ap-northeast-2
+
 
 ### Run
 
