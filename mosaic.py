@@ -189,6 +189,8 @@ def main():
     if(args.img_path16bit is not ""):
         filenames16bit = [img for img in glob.glob(
             args.img_path16bit+"/*.tif")]
+        if not os.path.exists(args.img_path8bit):
+            os.makedirs(args.img_path8bit)
         for im_fn_orig in filenames16bit:
             if(not os.path.isfile(args.img_path8bit+"/"+os.path.basename(im_fn_orig))):
                 convert_to_8Bit(im_fn_orig, args.img_path8bit +
@@ -395,7 +397,6 @@ def main():
             framev[framev > 0] = 255
             framev2[framev2 > 0] = 255
             graph_size = real_img.shape[1]  # 3500#3500
-            now = datetime.datetime.now()
             houses = cv2.dilate(houses_orig, kernel3, iterations=1)
             if(subtract_houses == 0):
                 framev2[houses > 0] = 0
@@ -419,6 +420,10 @@ def main():
                 housesdil2[:int(framev.shape[0]*thresh4), :] = 0
                 framev2[housesdil2 > 0] = 255
                 framev[housesdil > 0] = 255
+            if(len(np.where(framev[:int(framev.shape[0]*thresh5), :][3*int(framev[:int(framev.shape[0]*thresh5), :].shape[0]/4):, int(framev[:int(framev.shape[0]*thresh5), :].shape[1]/2)] > 0)[0]) > 0):
+                framev[int(framev.shape[0]*(thresh5-0.05)):, :] = 0
+            if(len(np.where(framev2[int(framev2.shape[0]*thresh6):, :][:int(framev2[int(framev2.shape[0]*thresh6):, :].shape[0]/4), int(framev2[int(framev2.shape[0]*thresh6):, :].shape[1]/2)] > 0)[0]) > 0):
+                framev2[:int(framev.shape[0]*(thresh6+0.05)), :] = 0
             dims = [[int(framev.shape[0]*(0.2)), int(framev.shape[0]*thresh5)],
                     [int(framev.shape[1]*thresh1), int(framev.shape[1]*thresh3)]]
             framev = cv2.resize(framev[min(dims[0]):max(dims[0]), min(
